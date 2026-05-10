@@ -12,6 +12,11 @@ client-side. Built with Next.js 15, React 19, Tailwind v4, `pdf-lib`, `pdfjs-dis
 and `tesseract.js`. There is no backend. There is no upload. There is nothing
 to track because there is no server.
 
+**Live: [clawpdf.netlify.app](https://clawpdf.netlify.app)**
+
+![Landing page](docs/screenshot-home.png)
+![Editor with PDF loaded](docs/screenshot-editor-loaded.png)
+
 ## Features
 
 - View & navigate (multi-page, zoom, page input, fit-to-width)
