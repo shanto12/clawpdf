@@ -31,3 +31,28 @@ jobs:
           name: clawpdf-out
           path: out/
           if-no-files-found: error
+
+  e2e:
+    runs-on: ubuntu-latest
+    needs: build-and-test
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Install dependencies
+        run: npm ci --no-audit --no-fund
+      - name: Install Playwright browser
+        run: npx playwright install --with-deps chromium
+      - name: Run e2e against live Netlify
+        run: npx playwright test
+        env:
+          CLAWPDF_BASE_URL: https://clawpdf.netlify.app
+      - name: Upload Playwright report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: playwright-report/
+          if-no-files-found: ignore

@@ -18,6 +18,7 @@ import { addRedactBoxes, addTextOverlays } from "@/lib/pdf/textOverlay";
 import { embedSignature } from "@/lib/pdf/signature";
 import { extractTextWithPdfjs } from "@/lib/pdf/text";
 import { listFormFields } from "@/lib/pdf/forms";
+import { PDFDocument } from "pdf-lib";
 import Link from "next/link";
 
 type Mode =
@@ -169,7 +170,10 @@ export function Editor() {
   async function doSplit() {
     setBusy("Splitting…");
     try {
-      const ranges = parseRangeString(splitRanges, pageCount);
+      // If PdfViewer hasn't reported pageCount yet (race on fast-click after upload),
+      // fall back to reading the page count directly from the loaded PDF bytes.
+      const pc = pageCount || (await PDFDocument.load(pdf!.bytes)).getPageCount();
+      const ranges = parseRangeString(splitRanges, pc);
       const parts = await splitPdfByRanges(pdf!.bytes, ranges);
       const base = pdf!.name.replace(/\.pdf$/i, "");
       parts.forEach((p, i) => downloadBytes(p, `${base}-part-${i + 1}.pdf`));

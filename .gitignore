@@ -44,3 +44,8 @@ next-env.d.ts
 sample.pdf
 mk.mjs
 docs/.tmp
+
+# Playwright
+/test-results/
+/playwright-report/
+/playwright/.cache/
